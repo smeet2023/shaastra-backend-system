@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ContestParticipantsGetResrep {
-    private String sh_id;
-    private Set<Integer> contestIds;
+    private Integer participant_id;      // Unique participant identifier
+    private String sh_id;                // Student's unique identifier
+    private String studentName;          // Full name from the associated Student entity
+    private String personal_email;       // Email address (for display/contact)
+    private Set<Integer> contestIds;     // List of contest IDs the participant is registered in
 }

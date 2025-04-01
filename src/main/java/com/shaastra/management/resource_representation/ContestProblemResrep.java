@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ContestProblemResrep {
+    private Integer contest_problem_id;  // Unique identifier for the problem
     private String problem_title;
     private String problem_description;
     private String problem_solution;

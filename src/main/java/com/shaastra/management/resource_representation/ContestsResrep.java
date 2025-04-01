@@ -13,16 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ContestsResrep {
-    // these fields are set by business logic or are calculated later:
-    private Integer total_participants;
-    private String status;
-    
-    // Input fields:
-    private String contest_description;
-    private String contest_link;
-    private OffsetDateTime contest_date;
-    
-    // List of ContestProblem IDs provided during creation.
-    private Set<Integer> contestProblemIds;
+    private Integer contest_id;               // Unique identifier for the contest
+    private String contest_name;              // Human-friendly name/title of the contest
+    private Integer total_participants;       // Total number of participants in the contest
+    private String status;                    // e.g., Scheduled, Ongoing, Completed
+    private String contest_description;       // Detailed description or HTML content
+    private String contest_link;              // URL/link to contest details or external page
+    private OffsetDateTime contest_date;      // Date and time of the contest
+    private Set<Integer> contestProblemIds;   // IDs of problems associated with the contest
 }
 
