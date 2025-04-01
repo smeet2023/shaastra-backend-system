@@ -11,18 +11,15 @@ import com.shaastra.management.entities.SolvedProblems;
 
 @Repository
 public interface SolvedProblemsRepository extends JpaRepository<SolvedProblems, Integer> {
-
-    // Custom method: retrieve solved problems by participant id
-    @Query(value = "SELECT * FROM solved_problems WHERE contest_participant_id = :participantId", nativeQuery = true)
-    List<SolvedProblems> findByContestParticipant_Participant_id(@Param("participantId") Integer participantId);
+    // Retrieve solved problems by participant ID
+    @Query("SELECT sp FROM SolvedProblems sp WHERE sp.contestParticipant.student.sh_id = :participantId")
+    List<SolvedProblems> findByParticipantId(@Param("participantId") String participantId);
     
-    @Query("SELECT sp FROM SolvedProblems sp WHERE sp.contest.contestId = :contestId AND sp.contestParticipant.participant_id = :participantId")
-    List<SolvedProblems> findByContestIdAndParticipantId(@Param("contestId") Integer contestId, @Param("participantId") Integer participantId);
-
-    @Query("SELECT COALESCE(SUM(sp.score), 0) FROM SolvedProblems sp " +
-    	       "WHERE sp.contest.contestId = :contestId AND sp.contestParticipant.participant_id = :participantId")
-    	Integer findTotalScoreByContestIdAndParticipantId(@Param("contestId") Integer contestId,
-    	                                                  @Param("participantId") Integer participantId);
-
-
-  }
+    // Retrieve solved problems for a specific contest and participant
+    @Query("SELECT sp FROM SolvedProblems sp WHERE sp.contest.contestId = :contestId AND sp.contestParticipant.student.sh_id = :participantId")
+    List<SolvedProblems> findByContestIdAndParticipantId(@Param("contestId") Integer contestId, @Param("participantId") String participantId);
+    
+    // Calculate total score in a contest for a participant
+    @Query("SELECT COALESCE(SUM(sp.score), 0) FROM SolvedProblems sp WHERE sp.contest.contestId = :contestId AND sp.contestParticipant.student.sh_id = :participantId")
+    Integer findTotalScoreByContestIdAndParticipantId(@Param("contestId") Integer contestId, @Param("participantId") String participantId);
+}

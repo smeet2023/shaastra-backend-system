@@ -12,7 +12,6 @@ import com.shaastra.management.entities.Contests;
 
 @Repository
 public interface ContestsRepository extends JpaRepository<Contests, Integer> {
-
-	 @Query(value = "SELECT * FROM contests WHERE contest_date > :dateTime", nativeQuery = true)
-	    List<Contests> findByContestDateAfter(@Param("dateTime") OffsetDateTime dateTime);
+    @Query("SELECT c FROM Contests c WHERE c.contest_date > :dateTime")
+    List<Contests> findByContestDateAfter(@Param("dateTime") OffsetDateTime dateTime);
 }

@@ -26,9 +26,8 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ContestParticipantsServiceImpl implements ContestParticipantsService 
-{
-
+public class ContestParticipantsServiceImpl implements ContestParticipantsService {
+    
     private final ContestParticipantsRepository repository;
     private final ModelMapper modelMapper; // Injected mapping utility
     private final StudentsRepository studentsRepository;
@@ -40,11 +39,13 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
         List<ContestParticipants> participants = repository.findAll();
         return participants.stream()
             .map(cp -> {
-                // Build the DTO manually
                 ContestParticipantsGetResrep resrep = ContestParticipantsGetResrep.builder()
+                        .participant_id(cp.getParticipant_id())
                         .sh_id(cp.getStudent() != null ? cp.getStudent().getSh_id() : null)
+                        .studentName(cp.getStudent() != null ? cp.getStudent().getName() : null) // assuming Student has getName()
+                        .personal_email(cp.getStudent() != null ? cp.getStudent().getPersonal_email() : null)
                         .build();
-                // Map the associated contest IDs
+                // Map associated contest IDs
                 if (cp.getContests() != null && !cp.getContests().isEmpty()) {
                     Set<Integer> contestIds = cp.getContests().stream()
                         .map(Contests::getContestId)
@@ -58,100 +59,89 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
             .collect(Collectors.toList());
     }
 
+    @Override
     public ContestParticipantsGetResrep patchUpdate(Integer participantId, ContestParticipantsPatchResrep patchDto) {
         // 1. Fetch the participant
         ContestParticipants cp = repository.findById(participantId)
-            .orElseThrow(() -> new ResourceNotFoundException("Participant not found"));
-
+            .orElseThrow(() -> new ResourceNotFoundException("Participant not found with id: " + participantId));
+        
         // 2. For each contest to add:
         if (patchDto.getAddContestIds() != null) {
             for (Integer cId : patchDto.getAddContestIds()) {
                 Contests contest = contestsRepository.findById(cId)
                     .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + cId));
-                // Add the participant to the contest's set
+                // Add participant to contest's set
                 contest.getParticipants().add(cp);
-                // Save the owning side
+                // Save the owning side (Contests is the owning side)
                 contestsRepository.save(contest);
             }
         }
-
+        
         // 3. For each contest to remove:
         if (patchDto.getRemoveContestIds() != null) {
             for (Integer cId : patchDto.getRemoveContestIds()) {
                 Contests contest = contestsRepository.findById(cId)
                     .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + cId));
-                // Remove the participant from the contest's set
                 contest.getParticipants().remove(cp);
-                // Save the owning side
                 contestsRepository.save(contest);
             }
         }
+        
+        // Build a GET DTO with enriched data
         ContestParticipantsGetResrep getResrep = ContestParticipantsGetResrep.builder()
+                .participant_id(cp.getParticipant_id())
                 .sh_id(cp.getStudent() != null ? cp.getStudent().getSh_id() : null)
+                .studentName(cp.getStudent() != null ? cp.getStudent().getName() : null)
+                .personal_email(cp.getStudent() != null ? cp.getStudent().getPersonal_email() : null)
                 .contestIds(cp.getContests().stream()
                         .map(Contests::getContestId)
                         .collect(Collectors.toSet()))
                 .build();
-        // 4. Build a GET response
-        // (assuming you have a getResrepFromParticipant() method or do it manually)
         return getResrep;
     }
 
-
-
-
     @Override
     public ContestParticipantsGetResrep getById(String id) {
-        ContestParticipants cp = repository.findById(id)
+        ContestParticipants cp = repository.findByShId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ContestParticipant not found with id: " + id));
-        
-        // Map the basic fields using ModelMapper if needed (here, we set sh_id explicitly)
         ContestParticipantsGetResrep resrep = ContestParticipantsGetResrep.builder()
+                .participant_id(cp.getParticipant_id())
                 .sh_id(cp.getStudent() != null ? cp.getStudent().getSh_id() : null)
+                .studentName(cp.getStudent() != null ? cp.getStudent().getName() : null)
+                .personal_email(cp.getStudent() != null ? cp.getStudent().getPersonal_email() : null)
                 .build();
-        
-        // Map the associated contests (many-to-many) to a set of contestIds
         if (cp.getContests() != null && !cp.getContests().isEmpty()) {
             Set<Integer> contestIds = cp.getContests().stream()
                     .map(Contests::getContestId)
                     .collect(Collectors.toSet());
             resrep.setContestIds(contestIds);
         } else {
-            resrep.setContestIds(new HashSet<>()); // or null, depending on your design
+            resrep.setContestIds(new HashSet<>());
         }
-        
         return resrep;
     }
 
-
-
     @Override
     public ContestParticipantsResrep create(ContestParticipantsResrep resrep) {
-        // Ensure the student with provided sh_id exists
+        // Find the student by sh_id
         Students student = studentsRepository.findByShId(resrep.getSh_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with sh_id: " + resrep.getSh_id()));
         
-        // Ensure the contest with provided contest_id exists
+        // Find the contest by contestId
         Contests contest = contestsRepository.findById(resrep.getContestId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + resrep.getContestId()));
         
-        // Create a new ContestParticipants record
         ContestParticipants cp = new ContestParticipants();
         cp.setStudent(student);
-        
-        // Since ContestParticipants is mapped as ManyToMany (non-owning side) we update the owning side:
+        // Add participant to contest (owning side update)
         contest.getParticipants().add(cp);
-        
-        // Save the participant first (or alternatively, save contest to update the join table)
         cp = repository.save(cp);
-        // Save contest to ensure the join table is updated
         contestsRepository.save(contest);
         
-        // Map the saved entity to our resrep. Ensure participantId is populated and contestId is set back.
+        // Map back to a creation DTO; here, we set participant_id, sh_id, and contestId
         ContestParticipantsResrep savedResrep = modelMapper.map(cp, ContestParticipantsResrep.class);
         savedResrep.setContestId(contest.getContestId());
         savedResrep.setSh_id(cp.getStudent().getSh_id());
-        
         return savedResrep;
     }
 
@@ -168,9 +158,9 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
         return list.stream()
                 .map(cp -> {
                     ContestParticipantsResrep dto = modelMapper.map(cp, ContestParticipantsResrep.class);
-                    // Since this method is for a given contest, assign the contestId to every DTO.
+                    // Since this method is for a given contest, set contestId in DTO
                     dto.setContestId(contestId);
-                    // Ensure sh_id is correctly set from the associated student.
+                    // Also, set sh_id explicitly from the student relationship
                     if (cp.getStudent() != null) {
                         dto.setSh_id(cp.getStudent().getSh_id());
                     }
@@ -178,5 +168,4 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
                 })
                 .collect(Collectors.toList());
     }
-
 }

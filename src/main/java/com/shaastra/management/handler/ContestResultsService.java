@@ -13,6 +13,6 @@ public interface ContestResultsService {
     ContestResultsResrep partialUpdate(Integer id, Map<String, Object> updates);
     void delete(Integer id);
     List<ContestResultsResrep> getRankingForContest(Integer contestId);
-    Integer getScoreForContestAndParticipant(Integer contestId, Integer participantId);
+    Integer getScoreForContestAndParticipant(Integer contestId, String participantId);
 
 }

@@ -49,7 +49,11 @@ public class ContestProblemServiceImpl implements ContestProblemService {
     public ContestProblemResrep update(Integer id, ContestProblemResrep resrep) {
         ContestProblem cp = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + id));
-        // Update entity fields manually
+        // Update entity fields manually from the DTO
+        cp.setProblem_title(resrep.getProblem_title());
+        cp.setProblem_description(resrep.getProblem_description());
+        cp.setProblem_solution(resrep.getProblem_solution());
+        cp.setProblem_difficulty(resrep.getProblem_difficulty());
         cp = repository.save(cp);
         return modelMapper.map(cp, ContestProblemResrep.class);
     }
@@ -58,7 +62,6 @@ public class ContestProblemServiceImpl implements ContestProblemService {
     public ContestProblemResrep partialUpdate(Integer id, Map<String, Object> updates) {
         ContestProblem cp = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + id));
-
         try {
             if (updates.containsKey("problem_title")) {
                 Object title = updates.get("problem_title");
@@ -99,7 +102,6 @@ public class ContestProblemServiceImpl implements ContestProblemService {
         } catch (ClassCastException | IllegalArgumentException ex) {
             throw new CustomBadRequestException("Error processing partial update: " + ex.getMessage(), ex);
         }
-
         cp = repository.save(cp);
         return modelMapper.map(cp, ContestProblemResrep.class);
     }

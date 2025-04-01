@@ -1,6 +1,7 @@
 package com.shaastra.management.handlerImpl;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,17 +36,7 @@ public class ContestsServiceImpl implements ContestsService {
     @Override
     public List<ContestsResrep> getAll() {
         return repository.findAll().stream()
-                .map(entity -> {
-                    ContestsResrep dto = modelMapper.map(entity, ContestsResrep.class);
-                    if (entity.getContestProblems() != null) {
-                        dto.setContestProblemIds(
-                            entity.getContestProblems().stream()
-                                  .map(ContestProblem::getContest_problem_id)
-                                  .collect(Collectors.toSet())
-                        );
-                    }
-                    return dto;
-                })
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -53,59 +44,33 @@ public class ContestsServiceImpl implements ContestsService {
     public ContestsResrep getById(Integer id) {
         Contests contest = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
-        ContestsResrep dto = modelMapper.map(contest, ContestsResrep.class);
-        if (contest.getContestProblems() != null) {
-            dto.setContestProblemIds(
-                contest.getContestProblems().stream()
-                       .map(ContestProblem::getContest_problem_id)
-                       .collect(Collectors.toSet())
-            );
-        }
-        return dto;
+        return mapToResponse(contest);
     }
-
 
     @Override
     public ContestsResrep create(ContestsResrep resrep) {
         try {
-            // Validate input: ensure contestProblemIds is not null (if needed)
+            // Validate input: ensure contestProblemIds is not null
             if (resrep.getContestProblemIds() == null) {
                 throw new CustomBadRequestException("ContestProblemIds cannot be null.");
             }
-            
-            // Fetch and validate contest problems using the IDs provided
+            // Fetch and validate ContestProblem entities using provided IDs
             Set<ContestProblem> contestProblems = resrep.getContestProblemIds().stream()
-                .map(id -> contestProblemRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + id)))
-                .collect(Collectors.toSet());
-            
-            // Create new Contest entity
+                    .map(problemId -> contestProblemRepository.findById(problemId)
+                            .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + problemId)))
+                    .collect(Collectors.toSet());
+            // Create a new Contest entity and set fields from the DTO
             Contests contest = new Contests();
             contest.setContest_description(resrep.getContest_description());
             contest.setContest_link(resrep.getContest_link());
             contest.setContest_date(resrep.getContest_date());
-            
-            // Set default or initial values
-            contest.setStatus("scheduled");  
-            contest.setTotal_participants(0);
-            
-            // Set the contest problems from the validated set
+            contest.setStatus("scheduled");  // Default status for new contest
+            contest.setTotal_participants(0);  // Initially zero participants
             contest.setContestProblems(contestProblems);
-            
-            // Save the contest
+            // Save the contest entity
             contest = repository.save(contest);
-            
-            // Map to resrep to include generated id, etc.
-            ContestsResrep createdResrep = modelMapper.map(contest, ContestsResrep.class);
-            // Ensure contestProblemIds are set back from the entity:
-            if (contest.getContestProblems() != null) {
-                createdResrep.setContestProblemIds(contest.getContestProblems().stream()
-                    .map(ContestProblem::getContest_problem_id)
-                    .collect(Collectors.toSet()));
-            }
-            
             logger.info("Successfully created contest with id: {}", contest.getContestId());
-            return createdResrep;
+            return mapToResponse(contest);
         } catch (DataIntegrityViolationException dive) {
             logger.error("Data integrity violation while creating contest: {}", dive.getMessage(), dive);
             throw new CustomBadRequestException("Duplicate or invalid data encountered while creating contest.", dive);
@@ -117,62 +82,66 @@ public class ContestsServiceImpl implements ContestsService {
             throw new CustomBadRequestException("An unexpected error occurred while creating contest.", ex);
         }
     }
+
     @Override
     public ContestsResrep update(Integer id, ContestsResrep resrep) {
         Contests contest = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
-        // Update fields as necessary
+        // Update mutable fields
+        contest.setContest_description(resrep.getContest_description());
+        contest.setContest_link(resrep.getContest_link());
+        contest.setContest_date(resrep.getContest_date());
+        contest.setStatus(resrep.getStatus());
+        contest.setTotal_participants(resrep.getTotal_participants());
+        // Optionally update contest problems if provided
+        if (resrep.getContestProblemIds() != null) {
+            Set<ContestProblem> contestProblems = resrep.getContestProblemIds().stream()
+                    .map(problemId -> contestProblemRepository.findById(problemId)
+                            .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + problemId)))
+                    .collect(Collectors.toSet());
+            contest.setContestProblems(contestProblems);
+        }
         contest = repository.save(contest);
-        return modelMapper.map(contest, ContestsResrep.class);
+        return mapToResponse(contest);
     }
 
     @Override
     public ContestsResrep partialUpdate(Integer id, Map<String, Object> updates) {
         Contests contest = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
-        
-        // Example of handling fields manually:
         if (updates.containsKey("contest_description")) {
             contest.setContest_description((String) updates.get("contest_description"));
         }
         if (updates.containsKey("total_participants")) {
-        	contest.setTotal_participants((Integer) updates.get("total_participants"));
+            Object tpObj = updates.get("total_participants");
+            if (tpObj instanceof Number) {
+                contest.setTotal_participants(((Number) tpObj).intValue());
+            } else {
+                throw new CustomBadRequestException("Invalid type for 'total_participants'. Expected numeric value.");
+            }
         }
         if (updates.containsKey("contest_link")) {
             contest.setContest_link((String) updates.get("contest_link"));
         }
-        if (updates.containsKey("contestProblemIds")) {
-            // Retrieve the list of IDs from the update payload
-            @SuppressWarnings("unchecked")
-            List<Integer> problemIds = (List<Integer>) updates.get("contestProblemIds");
-            // Fetch each ContestProblem entity by ID and collect them
-            Set<ContestProblem> updatedProblems = problemIds.stream()
-                .map(problemId -> contestProblemRepository.findById(problemId)
-                    .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + problemId)))
-                .collect(Collectors.toSet());
-            // Update the entity's contestProblems set
-            contest.setContestProblems(updatedProblems);
-        }
         if (updates.containsKey("contest_date")) {
-            // For date conversion, you might need to convert from String to OffsetDateTime
-            // Assuming the value is already an OffsetDateTime or converted appropriately
+            // Assuming the value is an OffsetDateTime instance or already converted appropriately
             contest.setContest_date((OffsetDateTime) updates.get("contest_date"));
         }
         if (updates.containsKey("status")) {
             contest.setStatus((String) updates.get("status"));
         }
-        // Continue for other fields...
-
-        contest = repository.save(contest);
-        ContestsResrep updatedResrep = modelMapper.map(contest, ContestsResrep.class);
-        if (contest.getContestProblems() != null) {
-            updatedResrep.setContestProblemIds(contest.getContestProblems().stream()
-                .map(ContestProblem::getContest_problem_id)
-                .collect(Collectors.toSet()));
+        if (updates.containsKey("contestProblemIds")) {
+            @SuppressWarnings("unchecked")
+            List<Integer> problemIds = (List<Integer>) updates.get("contestProblemIds");
+            Set<ContestProblem> updatedProblems = problemIds.stream()
+                    .map(problemId -> contestProblemRepository.findById(problemId)
+                            .orElseThrow(() -> new ResourceNotFoundException("ContestProblem not found with id: " + problemId)))
+                    .collect(Collectors.toSet());
+            contest.setContestProblems(updatedProblems);
         }
-        return modelMapper.map(contest, ContestsResrep.class);
+        contest = repository.save(contest);
+        return mapToResponse(contest);
     }
-
 
     @Override
     public void delete(Integer id) {
@@ -185,7 +154,23 @@ public class ContestsServiceImpl implements ContestsService {
     public List<ContestsResrep> getUpcomingContests() {
         OffsetDateTime now = OffsetDateTime.now();
         return repository.findByContestDateAfter(now).stream()
-                .map(entity -> modelMapper.map(entity, ContestsResrep.class))
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    private ContestsResrep mapToResponse(Contests contest) {
+        // Base mapping via ModelMapper
+        ContestsResrep dto = modelMapper.map(contest, ContestsResrep.class);
+        // Explicitly set contestProblemIds from the entity's relationship
+        if (contest.getContestProblems() != null && !contest.getContestProblems().isEmpty()) {
+            dto.setContestProblemIds(
+                contest.getContestProblems().stream()
+                       .map(ContestProblem::getContest_problem_id)
+                       .collect(Collectors.toSet())
+            );
+        } else {
+            dto.setContestProblemIds(new HashSet<>());
+        }
+        return dto;
     }
 }

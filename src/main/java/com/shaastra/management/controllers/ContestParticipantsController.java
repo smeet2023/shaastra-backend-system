@@ -58,7 +58,10 @@ public class ContestParticipantsController {
     }
 
     // Extra method: Get all participants for a given contest.
-    @GetMapping("/by-contest/{contestId}")
+    @GetMapping("/by-contest/{contestId}")  
+    
+    /*FIX THIS CONTROLLER , WANT ALL VALUES TO RETURN*/
+    
     public ResponseEntity<List<ContestParticipantsResrep>> getByContestId(@PathVariable Integer contestId) {
         return ResponseEntity.ok(contestParticipantsService.getByContestId(contestId));
     }

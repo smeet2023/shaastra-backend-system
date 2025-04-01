@@ -12,12 +12,12 @@ import com.shaastra.management.entities.ContestResults;
 
 @Repository
 public interface ContestResultsRepository extends JpaRepository<ContestResults, Integer> {
-
-    // Custom query for ranking – ordering by score (descending) and then rank
+    // Get ranking for a contest ordered by score and rank
     @Query("SELECT cr FROM ContestResults cr WHERE cr.contest.contestId = :contestId ORDER BY cr.score DESC, cr.rank_in_this_contest ASC")
     List<ContestResults> findRankingByContestId(@Param("contestId") Integer contestId);
     
-    @Query("SELECT cr.score FROM ContestResults cr WHERE cr.contest.contestId = :contestId AND cr.contestParticipant.participant_id = :participantId")
-    Optional<Integer> findScoreByContestIdAndParticipantId(@Param("contestId") Integer contestId,
-                                                           @Param("participantId") Integer participantId);
+    // Fetch participant's score in a specific contest
+    @Query("SELECT cr.score FROM ContestResults cr WHERE cr.contest.contestId = :contestId AND cr.contestParticipant.student.sh_id = :participantId")
+    Optional<Integer> findScoreByContestIdAndParticipantId(@Param("contestId") Integer contestId, @Param("participantId") String participantId);
+
 }

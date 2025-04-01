@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shaastra.management.handler.ContestResultsService;
@@ -30,7 +29,7 @@ public class ContestResultsController {
 	private final ContestResultsService contestResultsService;
 	@GetMapping("/contest/{contestId}/participant/{participantId}/score")
     public ResponseEntity<Integer> getScore(@PathVariable Integer contestId,
-                                              @PathVariable Integer participantId) {
+                                              @PathVariable String participantId) {
         Integer score = contestResultsService.getScoreForContestAndParticipant(contestId, participantId);
         return ResponseEntity.ok(score);
     }

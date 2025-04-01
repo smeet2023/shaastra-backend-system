@@ -12,8 +12,8 @@ public interface SolvedProblemsService {
     SolvedProblemsResrep update(Integer id, SolvedProblemsResrep resrep);
     SolvedProblemsResrep partialUpdate(Integer id, Map<String, Object> updates);
     void delete(Integer id);
-    List<SolvedProblemsResrep> getByContestAndParticipant(Integer contestId, Integer participantId);
-    List<SolvedProblemsResrep> getByParticipantId(Integer participantId);
-    Integer getTotalMarks(Integer contestId, Integer participantId);
+    List<SolvedProblemsResrep> getByContestAndParticipant(Integer contestId, String participantId);
+    List<SolvedProblemsResrep> getByParticipantId(String participantId);
+    Integer getTotalMarks(Integer contestId, String participantId);
 
 }

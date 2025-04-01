@@ -30,7 +30,7 @@ public class SolvedProblemsController {
     @GetMapping("/contest/{contestId}/participant/{participantId}/solved-problems")
     public ResponseEntity<List<SolvedProblemsResrep>> getSolvedProblemsByContestAndParticipant(
             @PathVariable Integer contestId, 
-            @PathVariable Integer participantId) {
+            @PathVariable String participantId) {
         return ResponseEntity.ok(solvedProblemsService.getByContestAndParticipant(contestId, participantId));
     }
 
@@ -40,7 +40,7 @@ public class SolvedProblemsController {
     }
     @GetMapping("/contest/{contestId}/participant/{participantId}/total-marks")
     public ResponseEntity<Integer> getTotalMarks(@PathVariable Integer contestId,
-                                                 @PathVariable Integer participantId) {
+                                                 @PathVariable String participantId) {
         Integer totalMarks = solvedProblemsService.getTotalMarks(contestId, participantId);
         return ResponseEntity.ok(totalMarks);
     }
@@ -75,7 +75,7 @@ public class SolvedProblemsController {
 
     // Extra method: Get solved problems for a specific contest participant.
     @GetMapping("/participant/{participantId}")
-    public ResponseEntity<List<SolvedProblemsResrep>> getByParticipant(@PathVariable Integer participantId) {
+    public ResponseEntity<List<SolvedProblemsResrep>> getByParticipant(@PathVariable String participantId) {
         return ResponseEntity.ok(solvedProblemsService.getByParticipantId(participantId));
     }
 }
