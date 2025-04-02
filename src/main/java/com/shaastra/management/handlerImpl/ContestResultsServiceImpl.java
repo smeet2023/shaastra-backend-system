@@ -19,6 +19,7 @@ import com.shaastra.management.handler.ContestResultsService;
 import com.shaastra.management.repositories.ContestParticipantsRepository;
 import com.shaastra.management.repositories.ContestResultsRepository;
 import com.shaastra.management.repositories.ContestsRepository;
+import com.shaastra.management.resource_representation.ContestResultPostResRep;
 import com.shaastra.management.resource_representation.ContestResultsResrep;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class ContestResultsServiceImpl implements ContestResultsService {
         return mapToResponse(cr);
     }
     @Override
-    public ContestResultsResrep create(ContestResultsResrep resrep) {
+    public ContestResultsResrep create(ContestResultPostResRep resrep) {
         Contests contest = contestsRepository.findById(resrep.getContest_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + resrep.getContest_id()));
         ContestParticipants participant = contestParticipantsRepository.findById(resrep.getParticipant_id())
@@ -124,10 +125,25 @@ public class ContestResultsServiceImpl implements ContestResultsService {
                 .map(entity -> mapToResponse(entity))
                 .collect(Collectors.toList());
     }
+//    private ContestResultsResrep mapToResponse(ContestResults entity) {
+//        ContestResultsResrep resrep = modelMapper.map(entity, ContestResultsResrep.class);
+//        resrep.setContest_id(entity.getContest().getContestId());
+//        resrep.setParticipant_id(entity.getContestParticipant().getParticipant_id());
+//        return resrep;
+//    }
     private ContestResultsResrep mapToResponse(ContestResults entity) {
-        ContestResultsResrep resrep = modelMapper.map(entity, ContestResultsResrep.class);
-        resrep.setContest_id(entity.getContest().getContestId());
-        resrep.setParticipant_id(entity.getContestParticipant().getParticipant_id());
-        return resrep;
+        ContestResultsResrep dto = modelMapper.map(entity, ContestResultsResrep.class);
+        dto.setContest_id(entity.getContest().getContestId());
+        dto.setContest_name(entity.getContest().getContest_name());
+        dto.setParticipant_id(entity.getContestParticipant().getParticipant_id());
+        // Explicitly set participant name from the associated Student entity
+        if (entity.getContestParticipant() != null && entity.getContestParticipant().getStudent() != null) {
+            dto.setParticipant_name(entity.getContestParticipant().getStudent().getName());
+        }
+        dto.setScore(entity.getScore());
+        dto.setRank_in_this_contest(entity.getRank_in_this_contest());
+        dto.setStatus(entity.getStatus());
+        return dto;
     }
+
 }

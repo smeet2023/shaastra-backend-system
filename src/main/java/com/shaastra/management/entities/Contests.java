@@ -31,6 +31,10 @@ public class Contests {
 
     private Integer total_participants;
     private String status;
+    
+    @Column(nullable = false)
+    private String contest_name; // could be part of an HTML page
+    
     private String contest_description; // could be part of an HTML page
     
     @Column(unique = true)

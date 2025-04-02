@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shaastra.management.handler.SolvedProblemsService;
+import com.shaastra.management.resource_representation.SolvedProblemsPostResRep;
 import com.shaastra.management.resource_representation.SolvedProblemsResrep;
 
 import jakarta.validation.Valid;
@@ -50,7 +51,7 @@ public class SolvedProblemsController {
     }
 
     @PostMapping
-    public ResponseEntity<List<SolvedProblemsResrep>> createBatch(@RequestBody List<SolvedProblemsResrep> requests) {
+    public ResponseEntity<List<SolvedProblemsResrep>> createBatch(@RequestBody List<SolvedProblemsPostResRep> requests) {
         return ResponseEntity.status(HttpStatus.CREATED).body(solvedProblemsService.create(requests));
     }
 

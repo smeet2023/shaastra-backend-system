@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ContestsResrep {
-    private Integer contest_id;               // Unique identifier for the contest
+    private Integer contestId;               // Unique identifier for the contest
     private String contest_name;              // Human-friendly name/title of the contest
     private Integer total_participants;       // Total number of participants in the contest
     private String status;                    // e.g., Scheduled, Ongoing, Completed

@@ -20,6 +20,7 @@ import com.shaastra.management.repositories.ContestParticipantsRepository;
 import com.shaastra.management.repositories.ContestProblemRepository;
 import com.shaastra.management.repositories.ContestsRepository;
 import com.shaastra.management.repositories.SolvedProblemsRepository;
+import com.shaastra.management.resource_representation.SolvedProblemsPostResRep;
 import com.shaastra.management.resource_representation.SolvedProblemsResrep;
 
 import lombok.RequiredArgsConstructor;
@@ -53,9 +54,9 @@ public class SolvedProblemsServiceImpl implements SolvedProblemsService {
     }
 
     @Override
-    public List<SolvedProblemsResrep> create(List<SolvedProblemsResrep> requests) {
+    public List<SolvedProblemsResrep> create(List<SolvedProblemsPostResRep> requests) {
         List<SolvedProblems> solvedProblemsList = new ArrayList<>();
-        for (SolvedProblemsResrep req : requests) {
+        for (SolvedProblemsPostResRep req : requests) {
             // Fetch related entities using the enriched identifiers
             ContestParticipants cp = contestParticipantsRepository.findById(req.getContest_participant_id())
                     .orElseThrow(() -> new ResourceNotFoundException("ContestParticipant not found with id: " + req.getContest_participant_id()));

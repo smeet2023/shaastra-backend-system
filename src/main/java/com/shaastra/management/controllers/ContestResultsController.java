@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shaastra.management.handler.ContestResultsService;
+import com.shaastra.management.resource_representation.ContestResultPostResRep;
 import com.shaastra.management.resource_representation.ContestResultsResrep;
 
 import jakarta.validation.Valid;
@@ -44,7 +45,7 @@ public class ContestResultsController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ContestResultsResrep> create(@Valid @RequestBody ContestResultsResrep resrep) {
+	public ResponseEntity<ContestResultsResrep> create(@Valid @RequestBody ContestResultPostResRep resrep) {
 		ContestResultsResrep created = contestResultsService.create(resrep);
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
 	}

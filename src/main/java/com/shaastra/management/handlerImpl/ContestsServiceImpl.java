@@ -61,6 +61,7 @@ public class ContestsServiceImpl implements ContestsService {
                     .collect(Collectors.toSet());
             // Create a new Contest entity and set fields from the DTO
             Contests contest = new Contests();
+            contest.setContest_name(resrep.getContest_name());
             contest.setContest_description(resrep.getContest_description());
             contest.setContest_link(resrep.getContest_link());
             contest.setContest_date(resrep.getContest_date());
@@ -88,6 +89,7 @@ public class ContestsServiceImpl implements ContestsService {
         Contests contest = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
         // Update mutable fields
+        contest.setContest_name(resrep.getContest_name());
         contest.setContest_description(resrep.getContest_description());
         contest.setContest_link(resrep.getContest_link());
         contest.setContest_date(resrep.getContest_date());
@@ -111,6 +113,9 @@ public class ContestsServiceImpl implements ContestsService {
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
         if (updates.containsKey("contest_description")) {
             contest.setContest_description((String) updates.get("contest_description"));
+        }
+        if (updates.containsKey("contest_name")) {
+        	contest.setContest_name((String) updates.get("contest_name"));
         }
         if (updates.containsKey("total_participants")) {
             Object tpObj = updates.get("total_participants");
