@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.shaastra.management.resource_representation.ContestResultPostResRep;
 import com.shaastra.management.resource_representation.ContestResultsResrep;
+import com.shaastra.management.resource_representation.ContestWiseScoreResrep;
 
 public interface ContestResultsService {
     List<ContestResultsResrep> getAll();
@@ -15,5 +16,6 @@ public interface ContestResultsService {
     void delete(Integer id);
     List<ContestResultsResrep> getRankingForContest(Integer contestId);
     Integer getScoreForContestAndParticipant(Integer contestId, String participantId);
+    List<ContestWiseScoreResrep> getContestWiseScoreByParticipant(String shId);
 
 }

@@ -19,5 +19,7 @@ public interface ContestResultsRepository extends JpaRepository<ContestResults, 
     // Fetch participant's score in a specific contest
     @Query("SELECT cr.score FROM ContestResults cr WHERE cr.contest.contestId = :contestId AND cr.contestParticipant.student.sh_id = :participantId")
     Optional<Integer> findScoreByContestIdAndParticipantId(@Param("contestId") Integer contestId, @Param("participantId") String participantId);
-
+    
+    @Query("SELECT cr FROM ContestResults cr WHERE cr.contestParticipant.student.sh_id = :shId")
+    List<ContestResults> findByStudentShId(@Param("shId") String shId);
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shaastra.management.handler.ContestResultsService;
 import com.shaastra.management.resource_representation.ContestResultPostResRep;
 import com.shaastra.management.resource_representation.ContestResultsResrep;
+import com.shaastra.management.resource_representation.ContestWiseScoreResrep;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,11 @@ public class ContestResultsController {
 	public ResponseEntity<ContestResultsResrep> getById(@PathVariable Integer id) {
 		return ResponseEntity.ok(contestResultsService.getById(id));
 	}
-
+	@GetMapping("/contest-wise-score/{shId}")
+    public ResponseEntity<List<ContestWiseScoreResrep>> getContestWiseScoreByParticipant(@PathVariable String shId) {
+        List<ContestWiseScoreResrep> scores = contestResultsService.getContestWiseScoreByParticipant(shId);
+        return ResponseEntity.ok(scores);
+    }
 	@PostMapping
 	public ResponseEntity<ContestResultsResrep> create(@Valid @RequestBody ContestResultPostResRep resrep) {
 		ContestResultsResrep created = contestResultsService.create(resrep);

@@ -21,6 +21,7 @@ import com.shaastra.management.repositories.ContestResultsRepository;
 import com.shaastra.management.repositories.ContestsRepository;
 import com.shaastra.management.resource_representation.ContestResultPostResRep;
 import com.shaastra.management.resource_representation.ContestResultsResrep;
+import com.shaastra.management.resource_representation.ContestWiseScoreResrep;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,6 +52,8 @@ public class ContestResultsServiceImpl implements ContestResultsService {
                 .orElseThrow(() -> new ResourceNotFoundException("ContestResults not found with id: " + id));
         return mapToResponse(cr);
     }
+    
+    
     @Override
     public ContestResultsResrep create(ContestResultPostResRep resrep) {
         Contests contest = contestsRepository.findById(resrep.getContest_id())
@@ -144,6 +147,25 @@ public class ContestResultsServiceImpl implements ContestResultsService {
         dto.setRank_in_this_contest(entity.getRank_in_this_contest());
         dto.setStatus(entity.getStatus());
         return dto;
+    }
+    
+    
+    
+    @Override
+    public List<ContestWiseScoreResrep> getContestWiseScoreByParticipant(String shId) {
+        // Retrieve all ContestResults for the given participant (by student's sh_id)
+        List<ContestResults> results = repository.findByStudentShId(shId);
+        // Map each result to our enriched DTO
+        return results.stream().map(cr -> 
+            ContestWiseScoreResrep.builder()
+                .sh_id(cr.getContestParticipant().getStudent().getSh_id())
+                .contest_name(cr.getContest().getContest_name())
+                .contest_date(cr.getContest().getContest_date())
+                .score(cr.getScore())
+                .rank_in_this_contest(cr.getRank_in_this_contest())
+                .status(cr.getStatus())
+                .build()
+        ).collect(Collectors.toList());
     }
 
 }
