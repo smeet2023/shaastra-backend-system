@@ -167,11 +167,38 @@ public class SolvedProblemsServiceImpl implements SolvedProblemsService {
         return repository.findTotalScoreByContestIdAndParticipantId(contestId, participantId);
     }
 
+//    private SolvedProblemsResrep mapToResponse(SolvedProblems sp) {
+//        // Base mapping via ModelMapper
+//        SolvedProblemsResrep dto = modelMapper.map(sp, SolvedProblemsResrep.class);
+//        // Set the unique solved problem record ID
+//        dto.setSolved_problem_id(sp.getSp_id());
+//        // Set contest participant details
+//        if (sp.getContestParticipant() != null) {
+//            dto.setContest_participant_id(sp.getContestParticipant().getParticipant_id());
+//            dto.setParticipantName(
+//                sp.getContestParticipant().getStudent() != null ? 
+//                sp.getContestParticipant().getStudent().getName() : null
+//            );
+//        }
+//        // Set contest details
+//        if (sp.getContest() != null) {
+//            dto.setContest_id(sp.getContest().getContestId());
+//            dto.setContestName(sp.getContest().getContest_description());
+//        }
+//        // Set contest problem details
+//        if (sp.getContestProblem() != null) {
+//            dto.setContest_problem_id(sp.getContestProblem().getContest_problem_id());
+//            dto.setProblem_title(sp.getContestProblem().getProblem_title());
+//        }
+//        dto.setScore(sp.getScore());
+//        return dto;
+//    }
     private SolvedProblemsResrep mapToResponse(SolvedProblems sp) {
-        // Base mapping via ModelMapper
         SolvedProblemsResrep dto = modelMapper.map(sp, SolvedProblemsResrep.class);
-        // Set the unique solved problem record ID
+        
+        // Set the unique solved problem record ID from the entity's primary key.
         dto.setSolved_problem_id(sp.getSp_id());
+        
         // Set contest participant details
         if (sp.getContestParticipant() != null) {
             dto.setContest_participant_id(sp.getContestParticipant().getParticipant_id());
@@ -180,17 +207,24 @@ public class SolvedProblemsServiceImpl implements SolvedProblemsService {
                 sp.getContestParticipant().getStudent().getName() : null
             );
         }
+        
         // Set contest details
         if (sp.getContest() != null) {
             dto.setContest_id(sp.getContest().getContestId());
-            dto.setContestName(sp.getContest().getContest_description());
+            dto.setContestName(sp.getContest().getContest_name());
+            dto.setContest_date(sp.getContest().getContest_date()); // New field mapping
         }
+        
         // Set contest problem details
         if (sp.getContestProblem() != null) {
             dto.setContest_problem_id(sp.getContestProblem().getContest_problem_id());
             dto.setProblem_title(sp.getContestProblem().getProblem_title());
         }
+        
+        // Set score
         dto.setScore(sp.getScore());
+        
         return dto;
     }
+
 }

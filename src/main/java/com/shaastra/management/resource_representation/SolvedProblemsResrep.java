@@ -1,5 +1,7 @@
 package com.shaastra.management.resource_representation;
 
+import java.time.OffsetDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +16,7 @@ public class SolvedProblemsResrep {
     private Integer contest_participant_id;    // ID of the participant who solved the problem
     private String participantName;            // Name of the participant (from ContestParticipants/Student)
     private Integer contest_id;                // The contest in which the problem was solved
+    private OffsetDateTime contest_date;       // Date and time of the contest
     private String contestName;                // A friendly name or title for the contest
     private Integer contest_problem_id;        // The problem that was solved
     private String problem_title;              // Title of the solved problem for quick reference
