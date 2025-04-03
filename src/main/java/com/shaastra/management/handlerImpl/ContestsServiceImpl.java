@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shaastra.management.entities.ContestProblem;
@@ -156,12 +158,11 @@ public class ContestsServiceImpl implements ContestsService {
     }
 
     @Override
-    public List<ContestsResrep> getUpcomingContests() {
-        OffsetDateTime now = OffsetDateTime.now();
-        return repository.findByContestDateAfter(now).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<ContestsResrep> getUpcomingContests(OffsetDateTime dateTime, Pageable pageable) {
+        Page<Contests> contestsPage = repository.findByContestDateAfter(dateTime, pageable);
+        return contestsPage.map(this::mapToResponse);
     }
+
 
     private ContestsResrep mapToResponse(Contests contest) {
         // Base mapping via ModelMapper
