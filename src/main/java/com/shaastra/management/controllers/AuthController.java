@@ -31,15 +31,36 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) {
+ // Admin login endpoint
+    @PostMapping("/admin/login")
+    public ResponseEntity<AuthResponse> adminLogin(@RequestBody AuthRequest authRequest) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Incorrect username or password"));
         }
+        
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        if (userDetails.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new AuthResponse("Access denied: not an admin"));
+        }
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(new AuthResponse(jwt));
+    }
+    
+    // Student login endpoint
+    @PostMapping("/student/login")
+    public ResponseEntity<AuthResponse> studentLogin(@RequestBody AuthRequest authRequest) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Incorrect username or password"));
+        }
+        
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        if (userDetails.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_STUDENT"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new AuthResponse("Access denied: not a student"));
+        }
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
         return ResponseEntity.ok(new AuthResponse(jwt));
     }

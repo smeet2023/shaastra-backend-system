@@ -30,10 +30,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**" , "/api/admins/register").permitAll()
-                .requestMatchers("/api/admins/**").hasRole("ADMIN")
-                // Other endpoints can be configured as needed
-                .anyRequest().authenticated())
+                // Allow unauthenticated access to the auth endpoints
+                .requestMatchers("/auth/**").permitAll()
+                // Endpoints for admins require ADMIN role
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                // Endpoints for students require STUDENT role
+                .requestMatchers("/api/student/**").hasRole("STUDENT")
+                // Public endpoints (if any) can be permitted without auth; e.g., contest listings:
+                .requestMatchers("/api/contests/**", "/api/contest-problems/**").permitAll()
+                .anyRequest().authenticated()
+            )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
