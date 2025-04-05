@@ -126,18 +126,15 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
         // Find the student by sh_id
         Students student = studentsRepository.findByShId(resrep.getSh_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with sh_id: " + resrep.getSh_id()));
-        
         // Find the contest by contestId
         Contests contest = contestsRepository.findById(resrep.getContestId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + resrep.getContestId()));
-        
         ContestParticipants cp = new ContestParticipants();
         cp.setStudent(student);
         // Add participant to contest (owning side update)
         contest.getParticipants().add(cp);
         cp = repository.save(cp);
         contestsRepository.save(contest);
-        
         // Map back to a creation DTO; here, we set participant_id, sh_id, and contestId
         ContestParticipantsResrep savedResrep = modelMapper.map(cp, ContestParticipantsResrep.class);
         savedResrep.setContestId(contest.getContestId());

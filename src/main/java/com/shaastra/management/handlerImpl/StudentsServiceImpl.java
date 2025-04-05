@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shaastra.management.entities.Contests;
@@ -24,7 +26,8 @@ public class StudentsServiceImpl implements StudentsService {
     private final StudentsRepository repository;
     private final ModelMapper modelMapper;
     // Note: For contest history, you might inject the ContestsRepository or use the custom query from StudentsRepository
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public List<StudentsResrep> getAll() {
         return repository.findAll().stream()
@@ -42,6 +45,8 @@ public class StudentsServiceImpl implements StudentsService {
     @Override
     public StudentsResrep create(StudentsResrep resrep) {
         Students student = modelMapper.map(resrep, Students.class);
+        String rawPassword = student.getCoding_contest_password();
+        student.setCoding_contest_password(passwordEncoder.encode(rawPassword));
         student = repository.save(student);
         return modelMapper.map(student, StudentsResrep.class);
     }

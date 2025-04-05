@@ -13,9 +13,11 @@ public class StudentsResrep {
     private long erp_id;
     private Integer current_year;
     private String division;
+    private String name;
     private String batch;
     private String sh_id;
     private String tp_id;
+    private String coding_contest_password;
     private String personal_email;
     private String gsuite_email;
     private String phone;

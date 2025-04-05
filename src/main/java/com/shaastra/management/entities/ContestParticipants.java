@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -45,7 +46,4 @@ public class ContestParticipants {
     @ManyToMany(mappedBy = "participants")
     @JsonBackReference
     private Set<Contests> contests = new HashSet<>();
-    
-    // Getters and setters...
 }
-

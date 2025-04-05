@@ -39,7 +39,7 @@ public class StudentsController {
         return ResponseEntity.ok(studentsService.getByErpId(erpId));
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<StudentsResrep> create(@Valid @RequestBody StudentsResrep resrep) {
         StudentsResrep created = studentsService.create(resrep);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);

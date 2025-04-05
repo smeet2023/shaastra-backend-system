@@ -19,21 +19,23 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private AdminRepository adminRepository;
+
     @Autowired
-    private StudentsRepository studentRepository; // For students
-    
+    private StudentsRepository studentRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // First, try to load an admin by username:
+        // Try to load as admin first
         Optional<Admin> adminOpt = adminRepository.findByUsername(username);
         if (adminOpt.isPresent()) {
-            return new CustomUserDetails(adminOpt.get(), "ADMIN");
+            return new CustomUserDetails(adminOpt.get());
         }
-        // Otherwise, try to load a student by username:
-        Optional<Students> studentOpt = studentRepository.findByUsername(username);
+        // Otherwise, try to load a student by sh_id (contest participant login)
+        Optional<Students> studentOpt = studentRepository.findByShId(username);
         if (studentOpt.isPresent()) {
-            return new CustomUserDetails(studentOpt.get(), "STUDENT");
+            return new CustomUserDetails(studentOpt.get());
         }
         throw new UsernameNotFoundException("User not found with username: " + username);
     }
 }
+

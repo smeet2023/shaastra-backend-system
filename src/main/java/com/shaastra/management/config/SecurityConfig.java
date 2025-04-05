@@ -4,6 +4,7 @@ package com.shaastra.management.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,19 +26,23 @@ public class SecurityConfig {
     
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Allow unauthenticated access to the auth endpoints
+                // Public endpoints
                 .requestMatchers("/auth/**").permitAll()
-                // Endpoints for admins require ADMIN role
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                // Endpoints for students require STUDENT role
-                .requestMatchers("/api/student/**").hasRole("STUDENT")
-                // Public endpoints (if any) can be permitted without auth; e.g., contest listings:
+                .requestMatchers(HttpMethod.POST, "/api/students/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/contest-participants/register").permitAll()
                 .requestMatchers("/api/contests/**", "/api/contest-problems/**").permitAll()
+                // Admin endpoints require ADMIN role
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH , "/api/contest-participants/{id}" , "/api/contest-problems/{id}" , "/api/solved-problems/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST , "/api/contest-problems/add-new-problems").hasRole("ADMIN")
+                // Contest participant (student) endpoints require PARTICIPANT role
+                .requestMatchers("/api/student/**").hasRole("PARTICIPANT")
+                // Any other endpoints require authentication
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -24,6 +24,9 @@ public class Students {
     @NotNull(message = "!! -> erp_id cannot be empty")
     private long erp_id; // e.g., 10322
     
+    @Column(unique = true)
+    private String coding_contest_password;
+    
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
     private Integer current_year;
     

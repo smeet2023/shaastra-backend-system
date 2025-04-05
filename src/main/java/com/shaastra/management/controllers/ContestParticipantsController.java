@@ -38,7 +38,7 @@ public class ContestParticipantsController {
         return ResponseEntity.ok(contestParticipantsService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<ContestParticipantsResrep> create(@Valid @RequestBody ContestParticipantsResrep resrep) {
         ContestParticipantsResrep created = contestParticipantsService.create(resrep);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);

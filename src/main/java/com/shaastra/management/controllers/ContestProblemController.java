@@ -39,7 +39,7 @@ public class ContestProblemController {
         return ResponseEntity.ok(contestProblemService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("/add-new-problems")
     public ResponseEntity<ContestProblemResrep> create(@Valid @RequestBody ContestProblemResrep resrep) {
         ContestProblemResrep created = contestProblemService.create(resrep);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);

@@ -11,31 +11,54 @@ import com.shaastra.management.entities.Admin;
 import com.shaastra.management.entities.Students;
 
 public class CustomUserDetails implements UserDetails {
+
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Admin admin, String role) {
+    // Constructor for Admin users (unchanged)
+    public CustomUserDetails(Admin admin) {
         this.username = admin.getUsername();
         this.password = admin.getPassword();
-        this.authorities = List.of(() -> "ROLE_" + role);
+        this.authorities = List.of(() -> "ROLE_ADMIN");
     }
 
-    public CustomUserDetails(Students student, String role) {
-        this.username = student.getUsername();
-        this.password = student.getPassword();
-        this.authorities = List.of(() -> "ROLE_" + role);
+    // Constructor for Contest Participants (students)
+    public CustomUserDetails(Students student) {
+        // Use the student's sh_id as the username
+        this.username = student.getSh_id();
+        // Use the coding_contest_password field (should be stored hashed)
+        this.password = student.getCoding_contest_password();
+        this.authorities = List.of(() -> "ROLE_PARTICIPANT");
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-    @Override public String getPassword() { return password; }
-    @Override public String getUsername() { return username; }
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
+    @Override
+    public String getPassword() {
+        return password;
+    }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
 

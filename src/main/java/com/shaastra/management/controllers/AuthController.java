@@ -23,45 +23,51 @@ import com.shaastra.management.resource_representation.AuthResponse;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;  // You can also configure a bean for this
-
+    private AuthenticationManager authenticationManager;
+    
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
+    
     @Autowired
     private JwtUtil jwtUtil;
 
- // Admin login endpoint
+    // Admin login endpoint
     @PostMapping("/admin/login")
     public ResponseEntity<AuthResponse> adminLogin(@RequestBody AuthRequest authRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Incorrect username or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new AuthResponse("Incorrect username or password" , null));
         }
-        
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        if (userDetails.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new AuthResponse("Access denied: not an admin"));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        // Ensure the user has admin authority
+        if (userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new AuthResponse("Access denied: not an admin" , null));
         }
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(new AuthResponse("Succesfull login" , jwt));
     }
     
-    // Student login endpoint
-    @PostMapping("/student/login")
-    public ResponseEntity<AuthResponse> studentLogin(@RequestBody AuthRequest authRequest) {
+    // Contest Participant (Student) login endpoint
+    @PostMapping("/participant/login")
+    public ResponseEntity<AuthResponse> participantLogin(@RequestBody AuthRequest authRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Incorrect username or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new AuthResponse("Incorrect username or password" , null));
         }
-        
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        if (userDetails.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_STUDENT"))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new AuthResponse("Access denied: not a student"));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        // Ensure the user has participant authority
+        if (userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_PARTICIPANT"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new AuthResponse("Access denied: not a contest participant" , null));
         }
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(new AuthResponse("Succesfull login" , jwt));
     }
 }
