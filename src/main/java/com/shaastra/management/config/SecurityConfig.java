@@ -38,8 +38,31 @@ public class SecurityConfig {
                 .requestMatchers("/api/contests/**", "/api/contest-problems/**").permitAll()
                 // Admin endpoints require ADMIN role
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PATCH , "/api/contest-participants/{id}" , "/api/contest-problems/{id}" , "/api/solved-problems/{id}").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST , "/api/contest-problems/add-new-problems").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH , 
+                					"/api/contest-participants/*" , 
+                					"/api/contest-problems/*" , 
+                					"/api/solved-problems/*" , 
+                					"/api/contest-results/*" , 
+                					"/api/contests/*")
+                
+                .hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE , 
+                		"/api/contest-participants/delete/*" , 
+                		"/api/contest-problems/delete/*" , 
+                		"/api/solved-problems/delete/*" , 
+                		"/api/contest-results/delete/*" , 
+                		"/api/contests/delete/*")
+                
+                .hasRole("ADMIN")
+                
+                .requestMatchers(HttpMethod.POST , 
+                		
+                					"/api/contest-problems/add-new-problems" , 
+                					"/api/contest-results/create-contest-result" , 
+                					"/api/solved-problems/add-solved-problems" , 
+                					"/api/contests/create-contest")
+                .hasRole("ADMIN")
+
                 // Contest participant (student) endpoints require PARTICIPANT role
                 .requestMatchers("/api/student/**").hasRole("PARTICIPANT")
                 // Any other endpoints require authentication

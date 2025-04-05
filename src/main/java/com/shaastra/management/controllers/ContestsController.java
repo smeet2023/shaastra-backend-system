@@ -51,7 +51,7 @@ public class ContestsController {
         return ResponseEntity.ok(contestsService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("/create-contest")
     public ResponseEntity<ContestsResrep> create(@Valid @RequestBody ContestsResrep resrep) {
         ContestsResrep created = contestsService.create(resrep);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -69,7 +69,7 @@ public class ContestsController {
         return ResponseEntity.ok(contestsService.partialUpdate(id, updates));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         contestsService.delete(id);
         return ResponseEntity.noContent().build();

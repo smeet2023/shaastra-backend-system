@@ -50,7 +50,7 @@ public class SolvedProblemsController {
         return ResponseEntity.ok(solvedProblemsService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("/add-solved-problems")
     public ResponseEntity<List<SolvedProblemsResrep>> createBatch(@RequestBody List<SolvedProblemsPostResRep> requests) {
         return ResponseEntity.status(HttpStatus.CREATED).body(solvedProblemsService.create(requests));
     }
@@ -68,7 +68,7 @@ public class SolvedProblemsController {
         return ResponseEntity.ok(solvedProblemsService.partialUpdate(id, updates));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         solvedProblemsService.delete(id);
         return ResponseEntity.noContent().build();

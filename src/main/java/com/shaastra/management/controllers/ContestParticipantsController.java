@@ -51,7 +51,7 @@ public class ContestParticipantsController {
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         contestParticipantsService.delete(id);
         return ResponseEntity.noContent().build();

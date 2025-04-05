@@ -49,7 +49,7 @@ public class ContestResultsController {
         List<ContestWiseScoreResrep> scores = contestResultsService.getContestWiseScoreByParticipant(shId);
         return ResponseEntity.ok(scores);
     }
-	@PostMapping
+	@PostMapping("/create-contest-result")
 	public ResponseEntity<ContestResultsResrep> create(@Valid @RequestBody ContestResultPostResRep resrep) {
 		ContestResultsResrep created = contestResultsService.create(resrep);
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -67,7 +67,7 @@ public class ContestResultsController {
 		return ResponseEntity.ok(contestResultsService.partialUpdate(id, updates));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		contestResultsService.delete(id);
 		return ResponseEntity.noContent().build();
