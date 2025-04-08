@@ -70,4 +70,12 @@ public class AuthController {
         String jwt = jwtUtil.generateToken(userDetails.getUsername());
         return ResponseEntity.ok(new AuthResponse(jwt , "Succesfull login"));
     }
+    
+    
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        // In a JWT stateless system, there’s usually nothing to do on the server side.
+        // Optionally, you could implement token blacklisting.
+        return ResponseEntity.ok("Logged out successfully");
+    }
 }

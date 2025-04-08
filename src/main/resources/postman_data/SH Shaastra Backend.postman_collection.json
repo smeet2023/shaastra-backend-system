@@ -1,0 +1,1157 @@
+{
+	"info": {
+		"_postman_id": "eddd7c03-5c0f-42df-b501-092384aff654",
+		"name": "SH Shaastra Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33082721"
+	},
+	"item": [
+		{
+			"name": "Contest Problems",
+			"item": [
+				{
+					"name": "create contest problem",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"problem_title\": \"Merge Sort\",\r\n      \"problem_description\": \"Implement merge sort algorithm.\",\r\n      \"problem_solution\": \"base64encodedPwegerDFdataHere\",\r\n      \"problem_difficulty\": \"Hard\"\r\n      \r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems"
+							]
+						},
+						"description": "Creates new Contest Problem"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all problems",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all problems with difficulty",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems/search?difficulty=Easy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems",
+								"search"
+							],
+							"query": [
+								{
+									"key": "difficulty",
+									"value": "Easy"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all problems by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all problems by id Copy",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"problem_title\" : \"no title\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-problems/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-problems",
+								"13"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Get Students",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"erp_id\": 10322,\r\n    \"current_year\": 2024,\r\n    \"division\":\"A\",\r\n    \"batch\": \"A1\",\r\n    \"tp_id\": \"TP12345\",\r\n    \"personal_email\": \"student@example.com\",\r\n    \"gsuite_email\": \"10322@tcetmumbai.in\",\r\n    \"phone\": \"9876543210\",\r\n    \"branch\": \"Computer Science\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/students",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"students"
+							]
+						},
+						"description": "Gets Students"
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Student",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"current_year\" : 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/students/10322",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"students",
+								"10322"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new student (POST)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"erp_id\": 103211123,\r\n        \"current_year\": 1,\r\n        \"division\": \"B\",\r\n        \"name\":\"name-2\",\r\n        \"batch\": \"2026\",\r\n        \"sh_id\": \"SH212346-1\",\r\n        \"tp_id\": \"22-CSB01000-28\",\r\n        \"coding_contest_password\": \"student2\",\r\n        \"personal_email\": \"alice-2.doe@example.com\",\r\n        \"gsuite_email\": \"1043321123@someuni.in\",\r\n        \"phone\": \"9876543922\",\r\n        \"branch\": \"CS\"\r\n    }\r\n//     },\r\n    // {\r\n    //     \"erp_id\": 103211224,\r\n    //     \"current_year\": 3,\r\n    //     \"division\": \"A\",\r\n    //     \"batch\": \"2023\",\r\n    //     \"sh_id\": \"SH212347\",\r\n    //     \"tp_id\": \"22-EEB01000-28\",\r\n    //     \"personal_email\": \"bob.smith@example.com\",\r\n    //     \"gsuite_email\": \"104332114@someuni.in\",\r\n    //     \"phone\": \"9876543930\",\r\n    //     \"branch\": \"EE\"\r\n    // }\r\n    {\r\n        \"erp_id\": 103211225,\r\n        \"current_year\": 2,\r\n        \"division\": \"C\",\r\n        \"batch\": \"2026\",\r\n        \"sh_id\": \"SH212348\",\r\n        \"tp_id\": \"22-MEB01000-29\",\r\n        \"personal_email\": \"charlie.johnson@example.com\",\r\n        \"gsuite_email\": \"104332115@someuni.in\",\r\n        \"phone\": \"9876543940\",\r\n        \"branch\": \"ME\"\r\n    }\r\n//     {\r\n//         \"erp_id\": 103211226,\r\n//         \"current_year\": 4,\r\n//         \"division\": \"B\",\r\n//         \"batch\": \"2022\",\r\n//         \"sh_id\": \"SH212349\",\r\n//         \"tp_id\": \"22-ITB01000-30\",\r\n//         \"personal_email\": \"dave.brown@example.com\",\r\n//         \"gsuite_email\": \"104332116@someuni.in\",\r\n//         \"phone\": \"9876543950\",\r\n//         \"branch\": \"IT\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211227,\r\n//         \"current_year\": 1,\r\n//         \"division\": \"A\",\r\n//         \"batch\": \"2025\",\r\n//         \"sh_id\": \"SH212350\",\r\n//         \"tp_id\": \"22-ECB01000-31\",\r\n//         \"personal_email\": \"eve.adams@example.com\",\r\n//         \"gsuite_email\": \"104332117@someuni.in\",\r\n//         \"phone\": \"9876543960\",\r\n//         \"branch\": \"ECE\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211228,\r\n//         \"current_year\": 3,\r\n//         \"division\": \"C\",\r\n//         \"batch\": \"2023\",\r\n//         \"sh_id\": \"SH212351\",\r\n//         \"tp_id\": \"22-CSB01000-32\",\r\n//         \"personal_email\": \"frank.thomas@example.com\",\r\n//         \"gsuite_email\": \"104332118@someuni.in\",\r\n//         \"phone\": \"9876543970\",\r\n//         \"branch\": \"CS\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211229,\r\n//         \"current_year\": 2,\r\n//         \"division\": \"B\",\r\n//         \"batch\": \"2026\",\r\n//         \"sh_id\": \"SH212352\",\r\n//         \"tp_id\": \"22-MEB01000-33\",\r\n//         \"personal_email\": \"grace.white@example.com\",\r\n//         \"gsuite_email\": \"104332119@someuni.in\",\r\n//         \"phone\": \"9876543980\",\r\n//         \"branch\": \"ME\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211230,\r\n//         \"current_year\": 4,\r\n//         \"division\": \"A\",\r\n//         \"batch\": \"2022\",\r\n//         \"sh_id\": \"SH212353\",\r\n//         \"tp_id\": \"22-EEB01000-34\",\r\n//         \"personal_email\": \"henry.miller@example.com\",\r\n//         \"gsuite_email\": \"104332120@someuni.in\",\r\n//         \"phone\": \"9876543990\",\r\n//         \"branch\": \"EE\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211231,\r\n//         \"current_year\": 1,\r\n//         \"division\": \"C\",\r\n//         \"batch\": \"2025\",\r\n//         \"sh_id\": \"SH212354\",\r\n//         \"tp_id\": \"22-ITB01000-35\",\r\n//         \"personal_email\": \"isabella.moore@example.com\",\r\n//         \"gsuite_email\": \"104332121@someuni.in\",\r\n//         \"phone\": \"9876544000\",\r\n//         \"branch\": \"IT\"\r\n//     },\r\n//     {\r\n//         \"erp_id\": 103211232,\r\n//         \"current_year\": 3,\r\n//         \"division\": \"B\",\r\n//         \"batch\": \"2023\",\r\n//         \"sh_id\": \"SH212355\",\r\n//         \"tp_id\": \"22-CSB01000-36\",\r\n//         \"personal_email\": \"jack.wilson@example.com\",\r\n//         \"gsuite_email\": \"104332122@someuni.in\",\r\n//         \"phone\": \"9876544010\",\r\n//         \"branch\": \"CS\"\r\n//     }\r\n// ]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/students/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"students",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/students/103211222",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"students",
+								"103211222"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contests",
+			"item": [
+				{
+					"name": "Get All Contests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Contest By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contests/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create A Contest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contest_date\": \"2024-12-13T10:30:00Z\",\r\n  \"contest_name\" : \"contest name 3\",\r\n  \"total_participants\":\"0\",\r\n  \"contest_link\": \"con4/shaashta.com\",\r\n  \"status\": \"scheduled\",\r\n  \"contest_description\": \"<p> This contest is designed to test your problem-solving skills in merge sort. <b>Good luck!</b></p>\",\r\n  \"contestProblemIds\": [6 , 7]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contest Details",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\" : \"end\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/shaastra/contests/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"shaastra",
+								"contests",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Contest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"contestProblemIds\" : [9 , 15 , 10]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contests/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contest",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contests/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get upcoming contests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi0yIiwiaWF0IjoxNzQzODQ2MjQzLCJleHAiOjE3NDM4ODIyNDN9.Ai8-nMoAJh-KWGkF-QqW_YmJAWDxTrgAyPoIuYkVVVw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contests/upcoming?page=0&size=10&sort=contest_date,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contests",
+								"upcoming"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "contest_date,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contest Participants",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-participants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-participants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get participant by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-participants/SH212348",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-participants",
+								"SH212348"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Participant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sh_id\":\"SH212347\",\r\n    \"contestId\":7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-participants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-participants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sh_id\":\"SH212348\",\r\n    \"contestId\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-participants/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-participants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Participant By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/shaastra/contest-participants/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"shaastra",
+								"contest-participants",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get participants by contest id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-participants/by-contest/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-participants",
+								"by-contest",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contest Results",
+			"item": [
+				{
+					"name": "Get and get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contest Result",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contest_id\": 7,\r\n  \"participant_id\": 2,\r\n  \"score\": 1000,\r\n  \"rank_in_this_contest\": 100,\r\n  \"status\": \"result-confirmed\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"result-not-set\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get score for a participant in a particular contest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi0yIiwiaWF0IjoxNzQzNzY4NDIyLCJleHAiOjE3NDM4MDQ0MjJ9.1Zdjwx33bFbuhwQwyN2m-29ETujh1Ihbv4Dr8iXxiys",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/contest/7/participant/SH212348/score",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"contest",
+								"7",
+								"participant",
+								"SH212348",
+								"score"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contest ranking (sorted results) for a given contest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/contest/7/ranking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"contest",
+								"7",
+								"ranking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete contest result",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contest Wise score for a particular participant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/contest-results/contest-wise-score/SH212345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contest-results",
+								"contest-wise-score",
+								"SH212345"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Solved Problems",
+			"item": [
+				{
+					"name": "Enter Solved Problems for a particular Contest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    // {\r\n    //     \"contest_participant_id\": 1,\r\n    //     \"contest_id\": 5,\r\n    //     \"contest_problem_id\": 11,\r\n    //     \"score\": 900\r\n    // }\r\n    // ,\r\n    {\r\n        \"contest_participant_id\": 2,\r\n        \"contest_id\": 5,\r\n        \"contest_problem_id\": 12,\r\n        \"score\": 85\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Solved Problems for a participant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi0yIiwiaWF0IjoxNzQzODcxNzgzLCJleHAiOjE3NDM5MDc3ODN9.ybgC6EhqTA6AYMh3g7BmsJlNRgP5Kwsm2BVcbTI3SUI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems/participant/SH212345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems",
+								"participant",
+								"SH212345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SolvedProblems ContestWise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems/contest/5/participant/SH212345/solved-problems",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems",
+								"contest",
+								"5",
+								"participant",
+								"SH212345",
+								"solved-problems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Total score based on participant and contest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems/contest/5/participant/SH212345/total-marks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems",
+								"contest",
+								"5",
+								"participant",
+								"SH212345",
+								"total-marks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"score\" : 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/solved-problems/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solved-problems",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Post admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin-admin\",\r\n    \"password\":\"adminpass\",\r\n    \"email\" :\"emailadmin@gmail.com\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admins/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admins",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Auth for admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Save the JWT from the \"message\" field into an environment variable\r",
+									"let jsonData = pm.response.json();\r",
+									"pm.environment.set(\"admin_token\", jsonData.jwt);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"admin-2\",\r\n  \"password\": \"admin2pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/admin/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth for student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"pm.environment.set(\"participant_token\", jsonData.jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"SH212346-1\",\r\n  \"password\": \"student2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/participant/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"participant",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
