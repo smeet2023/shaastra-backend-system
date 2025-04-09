@@ -16,5 +16,6 @@ public interface ContestsService {
     ContestsResrep update(Integer id, ContestsResrep resrep);
     ContestsResrep partialUpdate(Integer id, Map<String, Object> updates);
     void delete(Integer id);
+    public Map<String, Integer> getRecentParticipationSummary();
     Page<ContestsResrep> getUpcomingContests(OffsetDateTime dateTime, Pageable pageable);
 }

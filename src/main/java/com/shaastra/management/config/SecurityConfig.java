@@ -68,7 +68,7 @@ public class SecurityConfig {
                     // GET all contests: accessible to ADMIN and PARTICIPANT
                     .requestMatchers(HttpMethod.GET, "/api/contests").hasAnyRole("ADMIN", "PARTICIPANT")
                     // GET contest by id: ADMIN only
-                    .requestMatchers(HttpMethod.GET, "/api/contests/*").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/contests/**").hasRole("ADMIN")
                     // POST, PUT, PATCH, DELETE: ADMIN only
                     .requestMatchers(HttpMethod.POST, "/api/contests/create-contest").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/api/contests/**").hasRole("ADMIN")

@@ -50,7 +50,12 @@ public class ContestsController {
     public ResponseEntity<ContestsResrep> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(contestsService.getById(id));
     }
-
+    @GetMapping("/recent/participants-summary")
+    public ResponseEntity<Map<String, Integer>> getParticipationSummary() {
+        Map<String, Integer> summary = contestsService.getRecentParticipationSummary();
+        return ResponseEntity.ok(summary);
+    }
+    
     @PostMapping("/create-contest")
     public ResponseEntity<ContestsResrep> create(@Valid @RequestBody ContestsResrep resrep) {
         ContestsResrep created = contestsService.create(resrep);

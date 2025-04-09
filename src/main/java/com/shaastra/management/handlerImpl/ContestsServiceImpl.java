@@ -1,6 +1,7 @@
 package com.shaastra.management.handlerImpl;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,9 @@ import com.shaastra.management.entities.Contests;
 import com.shaastra.management.exceptions.CustomBadRequestException;
 import com.shaastra.management.exceptions.ResourceNotFoundException;
 import com.shaastra.management.handler.ContestsService;
+import com.shaastra.management.repositories.ContestParticipantsRepository;
 import com.shaastra.management.repositories.ContestProblemRepository;
+import com.shaastra.management.repositories.ContestResultsRepository;
 import com.shaastra.management.repositories.ContestsRepository;
 import com.shaastra.management.resource_representation.ContestsResrep;
 
@@ -34,7 +37,9 @@ public class ContestsServiceImpl implements ContestsService {
     private final ModelMapper modelMapper;
     private final ContestProblemRepository contestProblemRepository;
     private static final Logger logger = LoggerFactory.getLogger(ContestsServiceImpl.class);
-
+    private final ContestParticipantsRepository contestParticipantsRepository;
+    private final ContestResultsRepository contestResultsRepository;
+    
     @Override
     public List<ContestsResrep> getAll() {
         return repository.findAll().stream()
@@ -48,7 +53,29 @@ public class ContestsServiceImpl implements ContestsService {
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + id));
         return mapToResponse(contest);
     }
-
+    @Override
+    public Map<String, Integer> getRecentParticipationSummary() {
+        // Get the most recent contest
+        Contests recentContest = repository.findTopByOrderByContestDateDesc()
+                .orElseThrow(() -> new RuntimeException("No contest found"));
+        
+        Integer contestId = recentContest.getContestId();
+        
+        // Get all registered participant IDs
+        List<Integer> allParticipantIds = contestParticipantsRepository.findAllParticipantIds();
+        
+        // Get IDs of participants who actually appear (i.e. have contest results) in the recent contest
+        List<Integer> appearedParticipantIds = contestResultsRepository.findDistinctParticipantIdsByContestId(contestId);
+        
+        int appearedCount = appearedParticipantIds.size();
+        int totalParticipants = allParticipantIds.size();
+        int notAppearedCount = totalParticipants - appearedCount;
+        
+        Map<String, Integer> summary = new HashMap<>();
+        summary.put("appeared", appearedCount);
+        summary.put("notAppeared", notAppearedCount);
+        return summary;
+    }
     @Override
     public ContestsResrep create(ContestsResrep resrep) {
         try {

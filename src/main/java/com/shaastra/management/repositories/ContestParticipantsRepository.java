@@ -19,7 +19,8 @@ public interface ContestParticipantsRepository extends JpaRepository<ContestPart
     // Find participant by their student ID
     @Query("SELECT cp FROM ContestParticipants cp WHERE cp.student.sh_id = :shId")
     Optional<ContestParticipants> findByShId(@Param("shId") String shId);
-
-
+    
+    @Query("SELECT cp.participant_id FROM ContestParticipants cp")
+    List<Integer> findAllParticipantIds();
 }
 
