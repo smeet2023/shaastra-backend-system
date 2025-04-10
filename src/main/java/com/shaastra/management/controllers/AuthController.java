@@ -37,6 +37,7 @@ public class AuthController {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            System.out.println("======== " + authRequest.getUsername() +" "+ authRequest.getPassword());
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new AuthResponse(null , "Incorrect username or password"));
@@ -47,7 +48,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new AuthResponse(null , "Access denied: not an admin"));
         }
-        String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        String jwt = jwtUtil.generateToken(userDetails.getUsername() , userDetails.getAuthorities());
         return ResponseEntity.ok(new AuthResponse(jwt , "Succesfull login"));
     }
     
@@ -67,11 +68,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new AuthResponse(null , "Access denied: not a contest participant"));
         }
-        String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        String jwt = jwtUtil.generateToken(userDetails.getUsername() , userDetails.getAuthorities());
         return ResponseEntity.ok(new AuthResponse(jwt , "Succesfull login"));
     }
-    
-    
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         // In a JWT stateless system, there’s usually nothing to do on the server side.

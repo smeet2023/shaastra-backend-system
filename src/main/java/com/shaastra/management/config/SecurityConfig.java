@@ -1,6 +1,7 @@
 package com.shaastra.management.config;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/students/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/contest-participants/register").permitAll()
                     // Public endpoints for contests and contest problems listings
-
                     // Admin endpoints
                     .requestMatchers(HttpMethod.POST , "/api/admin/**").permitAll()
-                    
-                    
                     // ContestParticipants endpoints
                     // GET all: accessible to ADMIN and PARTICIPANT if needed; adjust as required.
                     .requestMatchers(HttpMethod.GET, "/api/contest-participants").hasAnyRole("ADMIN", "PARTICIPANT")
@@ -63,12 +61,13 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/contest-participants/**").hasRole("ADMIN")
                     // GET by contest: ADMIN only
                     .requestMatchers(HttpMethod.GET, "/api/contest-participants/by-contest/*").hasRole("ADMIN")
-                    
                     // Contests endpoints
                     // GET all contests: accessible to ADMIN and PARTICIPANT
                     .requestMatchers(HttpMethod.GET, "/api/contests").hasAnyRole("ADMIN", "PARTICIPANT")
                     // GET contest by id: ADMIN only
-                    .requestMatchers(HttpMethod.GET, "/api/contests/**").hasRole("ADMIN")
+//                    .requestMatchers(HttpMethod.GET, "/api/contests/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/contests/recent/participants-summary").hasRole("ADMIN")
+
                     // POST, PUT, PATCH, DELETE: ADMIN only
                     .requestMatchers(HttpMethod.POST, "/api/contests/create-contest").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/api/contests/**").hasRole("ADMIN")
@@ -134,8 +133,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Angular development URL
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization")); // Allow these headers
+
         configuration.setAllowCredentials(true); // if using credentials like cookies
+        configuration.setMaxAge((long) 3600); // Set max age for preflight cache
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

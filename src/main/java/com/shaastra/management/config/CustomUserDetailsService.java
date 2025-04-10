@@ -16,13 +16,10 @@ import com.shaastra.management.repositories.StudentsRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
     @Autowired
     private AdminRepository adminRepository;
-
     @Autowired
     private StudentsRepository studentRepository;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Try to load as admin first

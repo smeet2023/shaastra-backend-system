@@ -19,6 +19,7 @@ public class CustomUserDetails implements UserDetails {
     // Constructor for Admin users (unchanged)
     public CustomUserDetails(Admin admin) {
         this.username = admin.getUsername();
+        System.out.println("@@@   admin " + this.username);
         this.password = admin.getPassword();
         this.authorities = List.of(() -> "ROLE_ADMIN");
     }
