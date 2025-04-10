@@ -1,6 +1,6 @@
 package com.shaastra.management.resource_representation;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class ContestsResrep {
     private String status;                    // e.g., Scheduled, Ongoing, Completed
     private String contest_description;       // Detailed description or HTML content
     private String contest_link;              // URL/link to contest details or external page
-    private OffsetDateTime contest_date;      // Date and time of the contest
+    private LocalDateTime contest_date;      // Date and time of the contest
     private Set<Integer> contestProblemIds;   // IDs of problems associated with the contest
 }
 

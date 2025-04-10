@@ -1,6 +1,6 @@
 package com.shaastra.management.entities;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class Contests {
     @Column(unique = true)
     private String contest_link;
     
-    private OffsetDateTime contest_date;
+    private LocalDateTime contest_date;
     
     @ManyToMany
     @JoinTable(

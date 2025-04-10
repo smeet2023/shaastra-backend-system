@@ -1,5 +1,6 @@
 package com.shaastra.management.handlerImpl;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -159,7 +160,7 @@ public class ContestsServiceImpl implements ContestsService {
         }
         if (updates.containsKey("contest_date")) {
             // Assuming the value is an OffsetDateTime instance or already converted appropriately
-            contest.setContest_date((OffsetDateTime) updates.get("contest_date"));
+            contest.setContest_date((LocalDateTime) updates.get("contest_date"));
         }
         if (updates.containsKey("status")) {
             contest.setStatus((String) updates.get("status"));
