@@ -1,6 +1,7 @@
 package com.shaastra.management.repositories;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,5 +19,7 @@ public interface ContestsRepository extends JpaRepository<Contests, Integer> {
     Page<Contests> findByContestDateAfter(@Param("dateTime") OffsetDateTime dateTime, Pageable pageable);
     @Query(value = "SELECT * FROM contests ORDER BY contest_date DESC LIMIT 1", nativeQuery = true)
     Optional<Contests> findTopByOrderByContestDateDesc();
+    List<Contests> findByStatus(String status);
+
 
 }

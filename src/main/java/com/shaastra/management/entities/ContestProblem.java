@@ -23,20 +23,15 @@ public class ContestProblem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contest_problem_id;
-    
     @ManyToMany(mappedBy = "contestProblems")
     @JsonBackReference
     private Set<Contests> contests;
-    
     @Column(nullable = false, unique = true)
     private String problem_title;
-    
     @Column(nullable = false)
     private String problem_description;
-    
     @Column( unique = true)
     private String problem_solution;
-    
     @Column(nullable = false)
     private String problem_difficulty;
 }

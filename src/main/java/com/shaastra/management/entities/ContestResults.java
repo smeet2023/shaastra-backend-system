@@ -22,7 +22,6 @@ public class ContestResults {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contest_id", nullable = false)
     private Contests contest;
@@ -40,5 +39,4 @@ public class ContestResults {
             status = "result-not-set";  // Set default value if not provided
         }
     }
-    // Getters and setters ...
 }

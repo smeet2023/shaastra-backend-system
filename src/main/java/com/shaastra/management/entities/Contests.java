@@ -28,20 +28,14 @@ public class Contests {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contestId;
-
     private Integer total_participants;
     private String status;
-    
     @Column(nullable = false)
     private String contest_name; // could be part of an HTML page
-    
     private String contest_description; // could be part of an HTML page
-    
     @Column(unique = true)
     private String contest_link;
-    
     private LocalDateTime contest_date;
-    
     @ManyToMany
     @JoinTable(
         name = "contest_contest_participant_join_table",
@@ -52,7 +46,6 @@ public class Contests {
     @JsonManagedReference
     @JsonIgnoreProperties({"contestResults", "student", "solvedProblems", "contests"})
     private Set<ContestParticipants> participants = new HashSet<>();
-    
     @ManyToMany
     @JoinTable(
         name = "contest_contest_problem_join_table",
@@ -61,6 +54,4 @@ public class Contests {
     )
     @JsonManagedReference
     private Set<ContestProblem> contestProblems;
-    
-    // Getters and setters ...
 }

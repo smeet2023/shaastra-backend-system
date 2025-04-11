@@ -27,28 +27,21 @@ public class SolvedProblems {
     @Id    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer sp_id;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contest_participant_id", nullable = false)
     @JsonBackReference
     private ContestParticipants contestParticipant;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contest_id", nullable = false)
     @JsonIgnore
     private Contests contest;
-    
     @ManyToOne
     @JoinColumn(name = "contest_problem_id", nullable = false)
     private ContestProblem contestProblem;
-    
     @Column(columnDefinition = "INT DEFAULT 0")
     private Integer score;
-    
     @JsonProperty("contest_id")
     public Integer getContestId() {
         return this.contest != null ? this.contest.getContestId() : null;
     }
-    
-    // Getters and setters ...
 }

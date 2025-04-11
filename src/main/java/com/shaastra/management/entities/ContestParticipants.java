@@ -27,22 +27,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class ContestParticipants {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer participant_id;
-    
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sh_id", referencedColumnName = "sh_id", nullable = false)
     private Students student;
-    
     @OneToMany(mappedBy = "contestParticipant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ContestResults> contestResults = new HashSet<>();
-    
     @OneToMany(mappedBy = "contestParticipant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<SolvedProblems> solvedProblems = new HashSet<>();
-    
     @ManyToMany(mappedBy = "participants")
     @JsonBackReference
     private Set<Contests> contests = new HashSet<>();

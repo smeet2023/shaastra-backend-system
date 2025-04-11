@@ -19,44 +19,30 @@ import lombok.Setter;
     @UniqueConstraint(columnNames = {"erp_id", "tp_id", "personal_email", "gsuite_email"})
 })
 public class Students {
-
     @Id
     @NotNull(message = "!! -> erp_id cannot be empty")
     private long erp_id; // e.g., 10322
-    
     @Column(unique = true)
     private String coding_contest_password;
-    
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
     private Integer current_year;
-    
     @Column(nullable = false)
     private String division;
-
     @Column(nullable = false)
     private String name;
-    
     @Column(nullable = false)
     private String batch;
-    
     @Column(unique = true, nullable = false)  // Now non-null
     private String sh_id;
-    
     @Column(nullable = false)
     private String tp_id;
-    
     @Column(nullable = false, length = 70)
     private String personal_email;
-    
     @Column(nullable = false, length = 70)
     private String gsuite_email;
-    
     @Column(nullable = false)
     private String phone;
-    
     @Column(nullable = false)
     private String branch;
-    
     // Getters and setters...
 }
-

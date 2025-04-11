@@ -41,6 +41,16 @@ public class ContestsServiceImpl implements ContestsService {
     private final ContestParticipantsRepository contestParticipantsRepository;
     private final ContestResultsRepository contestResultsRepository;
     
+    public List<ContestsResrep> getByStatus(String status) {
+        // Convert your Contest entities to ContestResrep representations after filtering by status.
+        // You may call the repository's findByStatus method, then map the results.
+        List<Contests> contests = repository.findByStatus(status);
+        // Map to ContestResrep (implementation not shown – use ModelMapper or similar)
+        return contests.stream()
+            .map(contest -> modelMapper.map(contest, ContestsResrep.class))
+            .collect(Collectors.toList());
+    }
+
     @Override
     public List<ContestsResrep> getAll() {
         return repository.findAll().stream()

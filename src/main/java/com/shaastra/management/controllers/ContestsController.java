@@ -40,10 +40,16 @@ public class ContestsController {
     @Autowired
     private PagedResourcesAssembler<ContestsResrep> pagedAssembler;
     
-    
     @GetMapping
-    public ResponseEntity<List<ContestsResrep>> getAll() {
-        return ResponseEntity.ok(contestsService.getAll());
+    public ResponseEntity<List<ContestsResrep>> getContests(@RequestParam(required = false) String status) {
+        if (status != null) {
+            // Assume your service has a method to get contests by status:
+            List<ContestsResrep> contests = contestsService.getByStatus(status);
+            return ResponseEntity.ok(contests);
+        } else {
+            List<ContestsResrep> contests = contestsService.getAll();
+            return ResponseEntity.ok(contests);
+        }
     }
 
     @GetMapping("/{id}")

@@ -18,19 +18,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Admin {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column( unique = true)
     private String username;
-    
     @Column(nullable = false)
     private String password;
-    
     @Column(nullable = false, unique = true)
     private String email;
-
-    // Constructors, getters, setters (or use Lombok annotations)
 }
