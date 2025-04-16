@@ -54,7 +54,7 @@ public class SecurityConfig {
                     // GET by id: ADMIN only
                     .requestMatchers(HttpMethod.GET, "/api/contest-participants/*").hasRole("ADMIN")
                     // POST: allowed for ADMIN and PARTICIPANT (if self-registration is allowed)  
-                    .requestMatchers(HttpMethod.POST, "/api/contest-participants").hasAnyRole("ADMIN", "PARTICIPANT")
+//                    .requestMatchers(HttpMethod.POST, "/api/contest-participants").hasAnyRole("ADMIN", "PARTICIPANT")
                     // PATCH: allowed for ADMIN and PARTICIPANT  
                     .requestMatchers(HttpMethod.PATCH, "/api/contest-participants/*").hasAnyRole("ADMIN", "PARTICIPANT")
                     // DELETE: ADMIN only  
@@ -103,6 +103,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/contest-problems/**").hasRole("ADMIN")
                     // GET search contest problems: ADMIN and PARTICIPANT
                     .requestMatchers(HttpMethod.GET, "/api/contest-problems/search").hasAnyRole("ADMIN", "PARTICIPANT")
+                    .requestMatchers(HttpMethod.GET, "/api/contest-problems/by-contest/*").hasAnyRole("ADMIN", "PARTICIPANT")
                     
                     // SolvedProblems endpoints:
                     .requestMatchers(HttpMethod.GET, "/api/solved-problems/participant/**").hasAnyRole("ADMIN", "PARTICIPANT")

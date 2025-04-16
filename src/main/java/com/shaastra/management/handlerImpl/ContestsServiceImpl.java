@@ -76,7 +76,7 @@ public class ContestsServiceImpl implements ContestsService {
         List<Integer> allParticipantIds = contestParticipantsRepository.findAllParticipantIds();
         
         // Get IDs of participants who actually appear (i.e. have contest results) in the recent contest
-        List<Integer> appearedParticipantIds = contestResultsRepository.findDistinctParticipantIdsByContestId(contestId);
+        List<String> appearedParticipantIds = contestResultsRepository.findDistinctParticipantShIdsByContestId(contestId);
         
         int appearedCount = appearedParticipantIds.size();
         int totalParticipants = allParticipantIds.size();

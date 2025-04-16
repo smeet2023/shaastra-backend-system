@@ -14,6 +14,11 @@ public interface ContestProblemRepository extends JpaRepository<ContestProblem, 
     @Query("SELECT cp FROM ContestProblem cp WHERE cp.problem_difficulty = :problemDifficulty")
     List<ContestProblem> findByProblemDifficulty(@Param("problemDifficulty") String problemDifficulty);
     
+    @Query("SELECT cp FROM ContestProblem cp JOIN cp.contests c WHERE c.contestId = :contestId")
+    List<ContestProblem> findByContestId(@Param("contestId") Integer contestId);
+
+    
+    
     @Query("SELECT COUNT(cp) > 0 FROM ContestProblem cp WHERE cp.problem_title = :problemTitle AND cp.id <> :id")
     boolean existsByProblemTitleAndIdNot(@Param("problemTitle") String problemTitle, @Param("id") Integer id);
 }

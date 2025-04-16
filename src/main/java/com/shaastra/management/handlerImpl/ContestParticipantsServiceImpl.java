@@ -123,24 +123,34 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
 
     @Override
     public ContestParticipantsResrep create(ContestParticipantsResrep resrep) {
-        // Find the student by sh_id
+        // Retrieve the student using the provided sh_id; throw exception if not found.
         Students student = studentsRepository.findByShId(resrep.getSh_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with sh_id: " + resrep.getSh_id()));
-        // Find the contest by contestId
+        
+        // Retrieve the contest using the contestId; throw exception if not found.
         Contests contest = contestsRepository.findById(resrep.getContestId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + resrep.getContestId()));
+        
+        // Create a new ContestParticipants object and set the student.
         ContestParticipants cp = new ContestParticipants();
         cp.setStudent(student);
-        // Add participant to contest (owning side update)
-        contest.getParticipants().add(cp);
+        cp.getContests().add(contest);
+        
+        // First persist the ContestParticipants entity so that it gets its generated primary key.
         cp = repository.save(cp);
+        repository.flush();
+        // Then update the contest's participants collection.
+        contest.getParticipants().add(cp);
+        // Save the contest to update the join table mapping.
         contestsRepository.save(contest);
-        // Map back to a creation DTO; here, we set participant_id, sh_id, and contestId
+        
+        // Map the persisted ContestParticipants entity back to a response DTO.
         ContestParticipantsResrep savedResrep = modelMapper.map(cp, ContestParticipantsResrep.class);
         savedResrep.setContestId(contest.getContestId());
-        savedResrep.setSh_id(cp.getStudent().getSh_id());
+        savedResrep.setSh_id(student.getSh_id());
         return savedResrep;
     }
+
 
     @Override
     public void delete(Integer id) {

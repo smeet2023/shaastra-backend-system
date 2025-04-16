@@ -2,7 +2,10 @@ package com.shaastra.management.controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shaastra.management.entities.ContestProblem;
 import com.shaastra.management.handler.ContestProblemService;
+import com.shaastra.management.repositories.ContestProblemRepository;
 import com.shaastra.management.resource_representation.ContestProblemResrep;
 
 import jakarta.validation.Valid;
@@ -62,7 +67,19 @@ public class ContestProblemController {
         contestProblemService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
+    @Autowired
+    private ContestProblemRepository contestProblemRepository;
+    @Autowired
+    private ModelMapper modelMapper;  // Ensure this bean is configured
+    
+    @GetMapping("/by-contest/{contestId}")
+    public ResponseEntity<List<ContestProblemResrep>> getProblemsByContestId(@PathVariable Integer contestId) {
+        List<ContestProblem> problems = contestProblemRepository.findByContestId(contestId);
+        List<ContestProblemResrep> resrepList = problems.stream()
+            .map(problem -> modelMapper.map(problem, ContestProblemResrep.class))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(resrepList);
+    }
     // Extra method: Search problems by difficulty.
     @GetMapping("/search")
     public ResponseEntity<List<ContestProblemResrep>> searchByDifficulty(@RequestParam String difficulty) {

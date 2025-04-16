@@ -46,6 +46,7 @@ public class Contests {
     @JsonManagedReference
     @JsonIgnoreProperties({"contestResults", "student", "solvedProblems", "contests"})
     private Set<ContestParticipants> participants = new HashSet<>();
+    
     @ManyToMany
     @JoinTable(
         name = "contest_contest_problem_join_table",

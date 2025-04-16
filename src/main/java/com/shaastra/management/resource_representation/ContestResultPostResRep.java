@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ContestResultPostResRep {
     private Integer contest_id;
-    private Integer participant_id;
+    private String participant_id;
     private Integer score;
     private Integer rank_in_this_contest;
     private String status;

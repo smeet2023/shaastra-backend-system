@@ -50,7 +50,7 @@ public class SolvedProblemsController {
         return ResponseEntity.ok(solvedProblemsService.getById(id));
     }
 
-    @PostMapping("/add-solved-problems")
+    @PostMapping("/bulk")
     public ResponseEntity<List<SolvedProblemsResrep>> createBatch(@RequestBody List<SolvedProblemsPostResRep> requests) {
         return ResponseEntity.status(HttpStatus.CREATED).body(solvedProblemsService.create(requests));
     }

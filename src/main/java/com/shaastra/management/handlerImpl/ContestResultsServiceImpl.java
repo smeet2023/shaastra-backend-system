@@ -58,7 +58,7 @@ public class ContestResultsServiceImpl implements ContestResultsService {
     public ContestResultsResrep create(ContestResultPostResRep resrep) {
         Contests contest = contestsRepository.findById(resrep.getContest_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + resrep.getContest_id()));
-        ContestParticipants participant = contestParticipantsRepository.findById(resrep.getParticipant_id())
+        ContestParticipants participant = contestParticipantsRepository.findByShId(resrep.getParticipant_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Participant not found with id: " + resrep.getParticipant_id()));
         ContestResults contestResults = new ContestResults();
         contestResults.setContest(contest);

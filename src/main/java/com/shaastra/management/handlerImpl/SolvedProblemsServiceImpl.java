@@ -58,7 +58,7 @@ public class SolvedProblemsServiceImpl implements SolvedProblemsService {
         List<SolvedProblems> solvedProblemsList = new ArrayList<>();
         for (SolvedProblemsPostResRep req : requests) {
             // Fetch related entities using the enriched identifiers
-            ContestParticipants cp = contestParticipantsRepository.findById(req.getContest_participant_id())
+            ContestParticipants cp = contestParticipantsRepository.findByShId(req.getContest_participant_id())
                     .orElseThrow(() -> new ResourceNotFoundException("ContestParticipant not found with id: " + req.getContest_participant_id()));
             Contests contest = contestsRepository.findById(req.getContest_id())
                     .orElseThrow(() -> new ResourceNotFoundException("Contest not found with id: " + req.getContest_id()));

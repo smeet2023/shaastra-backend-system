@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SolvedProblemsPostResRep {
-    private Integer contest_participant_id;
+    private String contest_participant_id;
     private Integer contest_id;
     private Integer contest_problem_id;
     private Integer score;
