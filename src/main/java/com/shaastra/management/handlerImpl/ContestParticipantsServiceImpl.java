@@ -140,10 +140,11 @@ public class ContestParticipantsServiceImpl implements ContestParticipantsServic
         cp = repository.save(cp);
         repository.flush();
         // Then update the contest's participants collection.
-        contest.getParticipants().add(cp);
-        // Save the contest to update the join table mapping.
-        contestsRepository.save(contest);
-        
+     // now fire raw SQL to the join‑table
+        contestsRepository.addParticipantToContest(
+            contest.getContestId(),
+            cp.getParticipant_id() // whatever your PK getter is
+        );
         // Map the persisted ContestParticipants entity back to a response DTO.
         ContestParticipantsResrep savedResrep = modelMapper.map(cp, ContestParticipantsResrep.class);
         savedResrep.setContestId(contest.getContestId());
